@@ -54,6 +54,33 @@ git commit -m <"Delete files">
 git push origin <branch>
 ```
 
+**github 访问慢的原因及解决方法：**
+
+方法一：输入  `ipconfig/flushdns`  刷新 `DNS` 缓存即可
+
+方法二：
+
+ **1. 修改本地hosts文件**
+
+```
+windows系统的hosts文件的位置如下：C:\Windows\System32\drivers\etc\hosts
+mac/linux系统的hosts文件的位置如下：/etc/hosts
+复制代码
+```
+
+**2. 增加 github.global.ssl.fastly.net 和[ github.com 的映射**
+
+```sh
+获取Github相关网站的ip
+访问https://www.ipaddress.com，拉下来，找到页面中下方的“IP Address Tools – Quick Links”
+分别输入github.global.ssl.fastly.net和github.com，查询ip地址
+下面是我的配置
+140.82.114.4	github.com
+199.232.5.194	github.global.ssl.fastly.net
+```
+
+> 该方案参考链接：https://juejin.cn/post/6999271897057738789
+
 #### 数据库
 
 1. 查询每门课程成绩都大于80分的学生姓名
@@ -236,8 +263,9 @@ git push origin <branch>
 
       
 
-
 #### Web 自动化测试
+
+* [基于 `Page Object` 设计模式的企业微信 `web`端自动化测试实战](./web自动化测试/selenium_wework_main)
 
 
 #### 移动端自动化测试

@@ -193,13 +193,17 @@ git push origin <branch>
               }
       	}
           
-          // 筛选 len / 2 即可，一定是非叶子节点
+          // len / 2 取整的结果其实是第一个非叶子节点，换言之就是有孩子节点的节点
            private void buildMaxHeap(int len) {
                for (int i = (int) Math.floor(len / 2); i >= 0; i--) {
                    adjustHeap(i, len);
                }
            }
           
+          /**
+          * 该方法作用是：以下标为 i 的元素为根节点，往下的部分调整为堆结构
+          * len 的作用只是防止越界，数组的下标最多为 len - 1
+          */
           private void adjustHeap(int i, int len) {
               int left = 2 * i + 1;
               int right = 2 * i + 2;
@@ -219,7 +223,7 @@ git push origin <branch>
               }
               
               // 不相等，说明子节点中存在比该节点大的节点，那么堆还未调整成功
-              // 交换该节点和最大的子节点，那么父子关系交换，从新的子节点（原父节点）继续调整（递归操作），直到父节点大于两个子节点，则说明堆调整成功
+              // 交换该节点和最大的子节点，那么父子关系交换，从新的子节点（原父节点）继续调整（递归操作），直到父节点大于等于两个子节点，则说明堆调整成功
               if (largest != i) {
                   swap(i, largest);
                   adjustHeap(largest, len);

@@ -65,7 +65,6 @@ git push origin <branch>
 ```
 windows系统的hosts文件的位置如下：C:\Windows\System32\drivers\etc\hosts
 mac/linux系统的hosts文件的位置如下：/etc/hosts
-复制代码
 ```
 
 **2. 增加 github.global.ssl.fastly.net 和[ github.com 的映射**

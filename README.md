@@ -266,6 +266,23 @@ mac/linux系统的hosts文件的位置如下：/etc/hosts
 
 * [基于 `Page Object` 设计模式的企业微信 `web`端自动化测试实战](./web自动化测试/selenium_wework_main)
 
+**selenium 笔记**
+
+1. selenium 的实现原理
+
+   1. selenium client (python等语言编写的自动化测试脚本) 初始化一个service服务，通过Webdriver启动浏览器驱动程序chromedriver.exe
+   2. 通过RemoteWebDriver向浏览器驱动程序发送HTTP请求，浏览器驱动程序解析请求，打开浏览器，并获得sessionid，如果再次对浏览器操作需携带此id
+   3. 打开浏览器，绑定特定的端口，把启动后的浏览器作为webdriver的remote server
+   4. 打开浏览器后，所有的selenium的操作(访问地址，查找元素等)均通过RemoteConnection链接到remote server，然后使用execute方法调用_request方法通过urlib3向remote server发送请求
+   5. 浏览器通过请求的内容执行对应动作
+   6. 浏览器再把执行的动作结果通过浏览器驱动程序返回给测试脚本
+
+2. 显示等待和隐式等待
+
+   * 显示等待的代码定义了等待条件，只有该条件触发，才执行后续代码，可以把 sleep() 看作一种时间人为固定的显示等待
+
+   * 隐式等待是在尝试发现某个元素的时候，如果没能立刻发现，就等待固定长度的时间，也就是在没发现的这段时间还可以进行其它操作。默认设置是0秒。一旦设置了隐式等待时间，它的作用范围就是Webdriver对象实例的整个生命周期
+
 
 #### 移动端自动化测试
 

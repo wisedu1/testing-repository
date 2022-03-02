@@ -59,18 +59,178 @@ git push origin <branch>
 1. 查询每门课程成绩都大于80分的学生姓名
 
    ```sql
-   select name from stu
-   group by name
-   having name not in (
-   select name from stu
-   where score <80)
+   SELECT name FROM stu
+   GROUP BY name
+   HAVING name NOT IN (
+   SELECT name FROM stu
+   WHERE score <80)
    ```
 
-   > where 在聚合前根据条件筛选记录，然后用 group by 分组，group by 后面的字段作为分组依据，having 只能用于 group by 后，对分组统计后的结果数据进行过滤。where 后不可用聚合函数，having 后可以用聚合函数
+   > where 在聚合前根据条件筛选记录，然后用 group by 分组，group by 后面的字段作为分组依据，此时该字段不重复，having 只能用于 group by 后，对分组统计后的结果数据进行过滤。where 后不可用聚合函数，having 后可以用聚合函数
+   >
+   > 执行顺序：where -> group by -> having -> select
+
+* join 用法：
+
+  基于这些表之间的共同字段把来自两个或多个表的行结合起来
+
+  * **inner join**（等价于 join）：左表行和右表行匹配，输出
+
+    ```sql
+    SELECT column_name(s)
+    FROM table1
+    INNER JOIN table2
+    ON table1.column_name=table2.column_name;
+    ```
+
+  * **left join**：返回左表所有行，右表没有匹配则结果为 `NULL`
+
+    ```sql
+    SELECT column_name(s)
+    FROM table1
+    LEFT JOIN table2
+    ON table1.column_name=table2.column_name;
+    ```
+
+  * **right join**：与 `left join`相反
+
+    ```sql
+    SELECT column_name(s)
+    FROM table1
+    RIGHT JOIN table2
+    ON table1.column_name=table2.column_name;
+    ```
+
+  * **full outer join**: 结合 `left join`和`right join`的结果
+
+    ```sql
+    SELECT column_name(s)
+    FROM table1
+    FULL OUTER JOIN table2
+    ON table1.column_name=table2.column_name;
+    ```
+
+* union 用法：
+
+  合并两个或多个 `select` 语句的结果集，其中每个 `select`语句必须拥有相同数量的列，且列的数据类型和列的顺序相同
+
+  **默认取不重复的值**
+
+  ```sql
+  SELECT column_name(s) FROM table1
+  UNION
+  SELECT column_name(s) FROM table2;
+  ```
+
+  允许重复用 `UNION ALL`
+
+  ```sql
+  SELECT column_name(s) FROM table1
+  UNION ALL
+  SELECT column_name(s) FROM table2;
+  ```
+
+  
 
 #### 编程语言
 
-#### 算法
+#### 计算机网络
+
+#### 操作系统
+
+#### 数据结构和算法
+
+1. 排序算法
+
+   1. 堆排序 (平均时间复杂度 `O(nlogn)`，不稳定)
+
+      堆（是一种特殊的完全二叉树），用数组表示，分为大顶堆和小顶堆，大顶堆是指每个节点的值都 ≥ 其子节点的值，在堆排序算法中用于升序排列，小顶堆相反
+
+      **算法步骤**（以大顶堆为例）：
+
+      1. 创建一个堆
+      2. 将堆首（最大值）和堆尾互换
+      3. 除堆尾剩下的 n - 1 个元素调整为新堆，重复步骤 2, 3，直到剩下 1 个元素
+
+      首先要知道以下公式：
+
+      给定某个结点的下标 `i`（从 0 开始），其父节点和左右孩子节点的下标分别为：
+
+      * parent(i) = floor((i-1)/2)
+      * left(i) = 2i + 1
+      * right(i) = 2i +2
+
+      然后关注两个重要问题：
+
+      1. 如何将无序数组建立为堆？
+      2. 将堆顶元素放在堆尾后，如何将除堆尾剩下的 n - 1 个元素调整为新堆？
+
+      1. 筛选法：从第一个非叶子节点向上筛选，直到根元素筛选完毕（循环筛选 n / 2 个元素）
+      2. 将新的根元素（标记为`f`）下沉，和它的子元素比较，如果`f`小于某个子元素，则互相交换位置，直到`f`大于其所有子元素
+
+      ```java
+      public class ArrayHeap {
+          private int[] arr;
+          public ArrayHeap(int[] arr) {
+              this.arr = arr;
+          }
+          
+          private void swap(int i, int j) {
+              int temp = arr[i];
+              arr[i] = arr[j];
+              arr[j] = temp;
+          }
+      
+      	public void sort() {
+              int len = arr.length;
+              // 初始化大顶堆
+              buildMaxHeap(len);
+              int lastIndex = len - 1;
+              for (int i = lastIndex; i > 0; i--) {
+                  swap(0, i);
+                  len--;
+                  adjustHeap(0, len);
+              }
+      	}
+          
+          // 筛选 len / 2 即可，一定是非叶子节点
+           private void buildMaxHeap(int len) {
+               for (int i = (int) Math.floor(len / 2); i >= 0; i--) {
+                   adjustHeap(i, len);
+               }
+           }
+          
+          private void adjustHeap(int i, int len) {
+              int left = 2 * i + 1;
+              int right = 2 * i + 2;
+              
+              // 假定该节点是最大的节点
+              int largest = i;
+              
+              // 左孩子节点大，记录新的最大节点下标
+              if (left < len && arr[left] > arr[largest]) {
+                  largest = left;
+              }
+              
+              // 右孩子节点大，记录新的最大节点下标
+              // 这两步就是找到该节点和它的两个子节点中最大的节点
+              if (right < len && arr[right] > arr[largest]) {
+                  largest = right;
+              }
+              
+              // 不相等，说明子节点中存在比该节点大的节点，那么堆还未调整成功
+              // 交换该节点和最大的子节点，那么父子关系交换，从新的子节点（原父节点）继续调整（递归操作），直到父节点大于两个子节点，则说明堆调整成功
+              if (largest != i) {
+                  swap(i, largest);
+                  adjustHeap(largest, len);
+              }
+          }
+      }
+      ```
+
+      
+
+      
 
 
 #### Web 自动化测试
@@ -95,6 +255,8 @@ git push origin <branch>
 #### 接口安全测试
 
 #### docker
+
+#### 设计模式
 
 #### 接口测试框架开发
 

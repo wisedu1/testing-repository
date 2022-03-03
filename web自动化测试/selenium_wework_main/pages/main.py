@@ -1,4 +1,3 @@
-from time import sleep
 from selenium.webdriver.common.by import By
 from selenium_wework_main.pages.add_member import AddMember
 from selenium_wework_main.pages.base_page import BasePage
@@ -12,6 +11,6 @@ class Main(BasePage):
         # 添加成员
         # common_entrance[0].click()
         self.find(By.ID, 'menu_contacts').click()
-        sleep(3)
-        self.finds(By.CSS_SELECTOR, "[class='qui_btn ww_btn js_add_member']")[1].click()
+        self.wait_for_click((By.CSS_SELECTOR, ".js_has_member>div:nth-child(1)>a:nth-child(2)"))
+        self.find(By.CSS_SELECTOR, ".js_has_member>div:nth-child(1)>a:nth-child(2)").click()
         return AddMember(self._driver)
